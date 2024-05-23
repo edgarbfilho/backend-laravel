@@ -9,47 +9,62 @@ class CadastroController extends Controller
 {
     public function index()
     {
-        // header("Access-Control-Allow-Origin: *");
-        //header("Access-Control-Allow-Origin: http://localhost:8080");
+        
+        $cadastros = Cadastro::all();
 
-        return Cadastro::all();
+        //print_r($cadastros); exit;
+        
+        
+        // return view('cadastros.index');
+        return view('cadastros.index', compact('cadastros'));
+        
+    }
+
+    public function create()
+    {
+        return view('cadastros.create');
     }
 
     public function store(Request $request)
     {
         $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:cadastros',
-            'telefone' => 'required|string|max:20',
+            'nome' => 'required',
+            'email' => 'required|email',
+            'telefone' => 'required',
         ]);
 
-        $cadastro = Cadastro::create($request->all());
+        Cadastro::create($request->all());
 
-        return response()->json($cadastro, 201);
+        return redirect()->route('cadastros.index')->with('success', 'Cadastro criado com sucesso.');
     }
 
     public function show(Cadastro $cadastro)
     {
-        return $cadastro;
+        return view('cadastros.show', compact('cadastro'));
+    }
+
+    public function edit(Cadastro $cadastro)
+    {
+        return view('cadastros.edit', compact('cadastro'));
     }
 
     public function update(Request $request, Cadastro $cadastro)
     {
         $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => 'required|string|email|max:255|unique:cadastros,email,' . $cadastro->id,
-            'telefone' => 'required|string|max:20',
+            'nome' => 'required',
+            'email' => 'required|email',
+            'telefone' => 'required',
         ]);
 
         $cadastro->update($request->all());
 
-        return response()->json($cadastro, 200);
+        return redirect()->route('cadastros.index')->with('success', 'Cadastro atualizado com sucesso.');
     }
 
     public function destroy(Cadastro $cadastro)
     {
         $cadastro->delete();
 
-        return response()->json(null, 204);
+        return redirect()->route('cadastros.index')->with('success', 'Cadastro deletado com sucesso.');
     }
 }

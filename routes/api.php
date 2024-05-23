@@ -2,7 +2,7 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AuthController;
-use App\Http\Controllers\CadastroController;
+use App\Http\Controllers\ApiCadastroController;
 
 Route::get('/teste', function () {
     return response()->json(['message' => 'This is a test route']);
@@ -17,6 +17,6 @@ Route::middleware('auth:api')->group(function () {
         return response()->json(['message' => 'This is a test route']);
     });
 
-    Route::apiResource('cadastros', CadastroController::class);
+    Route::apiResource('cadastros', ApiCadastroController::class);
     
 });
